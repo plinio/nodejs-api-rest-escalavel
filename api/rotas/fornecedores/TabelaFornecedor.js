@@ -19,5 +19,16 @@ module.exports = {
         }
 
         return encontrado
+    },
+    atualizar (id, dadosParaAtualizar){
+        console.log("-----------vai passar no update");
+        console.log(dadosParaAtualizar);
+        return Modelo.update(
+            dadosParaAtualizar,
+            {
+                where: {id: id}
+            }
+        )
     }
+
 }
