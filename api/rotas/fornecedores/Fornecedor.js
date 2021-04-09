@@ -25,6 +25,16 @@ class Fornecedor{
         this.dataAtualizacao = resultado.dataAtualizacao,
         this.versao = resultado.versao
     }
+
+    async carregar(){
+        const encontrado = await TabelaFornecedor.pegarPorID(this.id);
+        this.empresa = encontrado.empresa;
+        this.email = encontrado.email,
+        this.categoria = encontrado.categoria,
+        this.dataCriacao = encontrado.dataCriacao,
+        this.dataAtualizacao = encontrado.dataAtualizacao,
+        this.versao = encontrado.versao
+    }
 }
 
 module.exports = Fornecedor
