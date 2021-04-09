@@ -1,0 +1,20 @@
+{
+  "name": "nodejs-api-rest-escalavel",
+  "version": "1.0.0",
+  "description": "Curso de NodeJS: Crie uma API REST padronizada e escalável",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plinio/nodejs-api-rest-escalavel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/plinio/nodejs-api-rest-escalavel/issues"
+  },
+  "homepage": "https://github.com/plinio/nodejs-api-rest-escalavel#readme"
+}
