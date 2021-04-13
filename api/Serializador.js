@@ -13,3 +13,7 @@ class Serializador {
         throw new ValorNaoSuportado(this.contentType)
     }
 }
+module.exports = {
+    Serializador: Serializador,
+    formatosAceitos: ['application/json']
+}
