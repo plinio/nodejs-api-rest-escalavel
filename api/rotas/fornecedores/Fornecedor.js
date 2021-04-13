@@ -1,4 +1,5 @@
 const TabelaFornecedor = require('./TabelaFornecedor')
+const NaoEncontrado = require('../../erros/NaoEncontrado')
 class Fornecedor{
 
     constructor({id, empresa, email, categoria, dataCriacao, dataAtualizacao, versao}){
@@ -49,7 +50,7 @@ class Fornecedor{
         })
 
         if(Object.keys(dadosParaAtualizar).length ===0 ){
-            throw new Error('não foram fornecidos dados para atualizar!')
+            throw new NaoEncontrado()
         }
 
         await TabelaFornecedor.atualizar(this.id, dadosParaAtualizar)

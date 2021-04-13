@@ -1,6 +1,8 @@
 const roteador = require('express').Router()
 const TabelaFornecedor = require('./TabelaFornecedor')
 const Fornecedor = require('./Fornecedor')
+const instancia = require('../../banco-de-dados')
+const NaoEncontrado = require('../../erros/NaoEncontrado')
 
 roteador.get('/', async (requisicao, resposta) => {
     //vai esperar pegar os dados para enviar a resposta
@@ -61,9 +63,14 @@ roteador.put('/:idFornecedor', async (requisicao, resposta) =>{
         resposta.status(204);//sucesso, mas sem conteúdo de retorno
         resposta.end();
     } catch(erro){
-        resposta.status(400);
+        if(erro instanceof NaoEncontrado){
+            resposta.status(404);    
+        }else{
+            resposta.status(400);
+        }
         resposta.send(JSON.stringify({
-            mensagem: erro.message
+            mensagem: erro.message,
+            id: erro.idErro
         }))
     }
 })
