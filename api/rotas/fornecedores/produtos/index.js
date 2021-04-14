@@ -10,14 +10,18 @@ roteador.get('/', async (requisicao, resposta)=>{
     )
 })
 
-roteador.post('/', async (requisicao, resposta)=>{
-    const idFornecedor = requisicao.params.idFornecedor;
-    const corpo = requisicao.body;
-    const dados = Object.assign({}, corpo, {fornecedor: idFornecedor})
-    const produto = new Produto(dados);
-    await produto.criar();
-    resposta.status(201);
-    resposta.send(produto);
+roteador.post('/', async (requisicao, resposta, proximo)=>{
+    try {
+        const idFornecedor = requisicao.params.idFornecedor;
+        const corpo = requisicao.body;
+        const dados = Object.assign({}, corpo, {fornecedor: idFornecedor})
+        const produto = new Produto(dados);
+        await produto.criar();
+        resposta.status(201);
+        resposta.send(produto);
+    } catch (erro) {
+        proximo(erro);
+    }
 })
 
 

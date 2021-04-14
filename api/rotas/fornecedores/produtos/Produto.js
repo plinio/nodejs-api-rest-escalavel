@@ -11,7 +11,18 @@ class Produto{
         this.versao = versao
     }
 
+    validar(){
+        if(typeof this.titulo !== 'string' || this.titulo.length === 0){
+            throw new Error('O campo título está inválido')
+        }
+
+        if(typeof this.preco !== 'number' || this.preco === 0){
+            throw new Error('O campo preço está inválido')
+        }
+    }
+
     async criar(){
+        this.validar();
         const resultado = await Tabela.inserir({
             titulo: this.titulo,
             preco: this.preco,
