@@ -1,4 +1,3 @@
-const modeloTabelaFornecedor = require('../modeloTabelaFornecedor')
 const Modelo = require('./ModeloTabelaProduto')
 module.exports = {
     listar(idFornecedor){
@@ -7,5 +6,8 @@ module.exports = {
                 fornecedor: idFornecedor
             }
         })
+    },
+    inserir(dados){
+        return Modelo.create(dados)
     }
 }
