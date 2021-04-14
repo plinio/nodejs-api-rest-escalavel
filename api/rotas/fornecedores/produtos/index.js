@@ -20,6 +20,19 @@ roteador.post('/', async (requisicao, resposta)=>{
     resposta.send(produto);
 })
 
+
+roteador.delete('/:id', async (requisicao, resposta)=>{
+    const dados = {
+        id: requisicao.params.id,
+        fornecedor: requisicao.params.idFornecedor
+    }
+
+    const produto = new Produto(dados)
+    await produto.apagar();
+    resposta.status(204);
+    resposta.end()
+})
+
 roteador.use('/:idProduto/reclamacoes', roteadorReclamacoes)
 
 module.exports = roteador
