@@ -1,4 +1,5 @@
 const Modelo = require('./ModeloTabelaProduto')
+const instancia = require('../../../banco-de-dados')
 module.exports = {
     listar(idFornecedor){
         return Modelo.findAll({
@@ -40,5 +41,19 @@ module.exports = {
                 where: dadosDoProduto
             }
         )
+    },
+    subtrair(idProduto, idFornecedor, campo, quantidade){
+        return instancia.transaction(async transacao => {// usando instancia do banco para evitar concorrencia (muitas pessoas acessando a API para diminuir o estoque, por exemplo)
+            const produto = await Modelo.findOne({
+                where: {
+                    id: idProduto,
+                    fornecedor: idFornecedor
+                }
+            })
+        
+            produto[campo] = quantidade
+            await produto.save()
+            return produto
+        })
     }
 }
