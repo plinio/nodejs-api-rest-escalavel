@@ -19,6 +19,7 @@ class Produto{
         if(typeof this.preco !== 'number' || this.preco === 0){
             throw new Error('O campo preço está inválido')
         }
+        //console.log(this);
     }
 
     async criar(){
@@ -29,6 +30,7 @@ class Produto{
             estoque: this.estoque,
             fornecedor: this.fornecedor
         })
+        //console.log(resultado);
 
         //após inserir ja terei os demais dados que vieram do banco e completar:
         this.id = resultado.id

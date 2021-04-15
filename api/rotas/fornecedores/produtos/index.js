@@ -24,9 +24,15 @@ roteador.post('/', async (requisicao, resposta, proximo)=>{
         const serializador = new Serializador(
             resposta.getHeader('Content-Type')
         )
+        // enriquecendo a resposta com atributos de cabeçalho
+        resposta.set('ETag', produto.versao)
+        const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+        resposta.set('Last-Modified', timestamp)
+        resposta.set('Location', `/api/fornecedores/${produto.fornecedor}/produtos/${produto.id}`)
+        // fim do enriquecimento de resposta com atributos de cabeçalho
         resposta.status(201);
         resposta.send(
-            serializador.serializar(produtos)
+            serializador.serializar(produto)
         )
     } catch (erro) {
         proximo(erro);
@@ -60,6 +66,11 @@ roteador.get('/:id', async (requisicao, resposta, proximo)=>{
             resposta.getHeader('Content-Type'),
             ['preco', 'estoque', 'fornecedor', 'dataCriacao', 'dataAtualizacao', 'versao']
         )
+        // enriquecendo a resposta com atributos de cabeçalho
+        resposta.set('ETag', produto.versao)
+        const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+        resposta.set('Last-Modified', timestamp)
+        // fim do enriquecimento de resposta com atributos de cabeçalho
         resposta.send(
             serializador.serializar(produto)
         )
@@ -80,6 +91,12 @@ roteador.put('/:id', async (requisicao, resposta, proximo)=>{
         )
         const produto = new Produto(dados)
         await produto.atualizar()
+        await produto.carregar()
+        // enriquecendo a resposta com atributos de cabeçalho
+        resposta.set('ETag', produto.versao)
+        const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+        resposta.set('Last-Modified', timestamp)
+        // fim do enriquecimento de resposta com atributos de cabeçalho
         resposta.status(204)
         resposta.end()
     } catch (error) {
@@ -97,6 +114,12 @@ roteador.post('/:id/diminuir-estoque', async (requisicao, resposta, proximo)=>{
         await produto.carregar() //se o produto nao existir vai cair no  catch
         produto.estoque = produto.estoque - requisicao.body.quantidade
         await produto.diminuirEstoque()
+        await produto.carregar()
+        // enriquecendo a resposta com atributos de cabeçalho
+        resposta.set('ETag', produto.versao)
+        const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+        resposta.set('Last-Modified', timestamp)
+        // fim do enriquecimento de resposta com atributos de cabeçalho
         resposta.status(204)
         resposta.end()
     } catch (error) {
