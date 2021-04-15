@@ -7,6 +7,7 @@ const CampoInvalido = require('./erros/CampoInvalido')
 const DadosNaoFornecidos = require('./erros/DadosNaoFornecidos')
 const ValorNaoSuportado = require('./erros/ValorNaoSuportado')
 const FormatosAceitos = require('./Serializador').formatosAceitos
+const SerializadorErro = require('./Serializador').SerializadorErro
 
 app.use(bodyParser.json());
 const roteador = require('./rotas/fornecedores');
@@ -42,11 +43,16 @@ app.use((erro, requisicao, resposta, proximaFuncao) =>{
         status = 406    
     }
     
-    resposta.status(status);
-    resposta.send(JSON.stringify({
-        mensagem: erro.message,
-        id: erro.idErro
-    }))
+    const serializador = new SerializadorErro(
+        resposta.getHeader('Content-Type')
+    )
+    resposta.status(status)
+    resposta.send(
+        serializador.serializar({
+            mensagem: erro.message,
+            id: erro.idErro
+        })
+    )
 })
 
 app.listen(config.get('api.porta'), () => console.log('A API está no ar'));
