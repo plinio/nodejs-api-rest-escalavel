@@ -68,6 +68,25 @@ roteador.get('/:id', async (requisicao, resposta, proximo)=>{
     }
 })
 
+roteador.put('/:id', async (requisicao, resposta, proximo)=>{
+    try {
+        const dados = Object.assign(
+            {},//objeto base para mergear (vazio)
+            requisicao.body,//dados que vier da requisicao
+            {
+                id: requisicao.params.id,
+                fornecedor: requisicao.fornecedor.id
+            }//dados inalteráveis que vem do banco
+        )
+        const produto = new Produto(dados)
+        await produto.atualizar()
+        resposta.status(204)
+        resposta.end()
+    } catch (error) {
+        proximo(error)
+    }
+})
+
 roteador.use('/:idProduto/reclamacoes', roteadorReclamacoes)
 
 module.exports = roteador
