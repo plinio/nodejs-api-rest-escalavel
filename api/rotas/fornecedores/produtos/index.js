@@ -79,6 +79,28 @@ roteador.get('/:id', async (requisicao, resposta, proximo)=>{
     }
 })
 
+//rota para consultar dados de cabeçaho
+roteador.head('/:id', async (requisicao, resposta, proximo)=>{
+    try {
+        const dados = {
+            id: requisicao.params.id,
+            fornecedor: requisicao.fornecedor.id
+        }
+    
+        const produto = new Produto(dados)
+        await produto.carregar()
+        // enriquecendo a resposta com atributos de cabeçalho
+        resposta.set('ETag', produto.versao)
+        const timestamp = (new Date(produto.dataAtualizacao)).getTime()
+        resposta.set('Last-Modified', timestamp)
+        // fim do enriquecimento de resposta com atributos de cabeçalho
+        resposta.status(200)
+        resposta.end()
+    } catch (error) {
+        proximo(error)
+    }  
+})
+
 roteador.put('/:id', async (requisicao, resposta, proximo)=>{
     try {
         const dados = Object.assign(
