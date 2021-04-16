@@ -3,6 +3,14 @@ const TabelaFornecedor = require('./TabelaFornecedor')
 const Fornecedor = require('./Fornecedor')
 const SerializadorFornecedor = require('../../Serializador').SerializadorFornecedor
 
+//liberando rota api/fornecedores/ para executar métodos no console do navegador
+roteador.options('/',(requisicao,resposta)=>{
+    resposta.set('Access-Control-Allow-Methods', 'GET, POST')
+    resposta.set('Access-Control-Allow-Headers', 'Content-Type')
+    resposta.status(204)
+    resposta.end()
+})
+
 roteador.get('/', async (requisicao, resposta) => {
     //vai esperar pegar os dados para enviar a resposta
     const resultados = await TabelaFornecedor.listar()
@@ -46,6 +54,14 @@ roteador.get('/:idFornecedor', async (requisicao, resposta, proximaFuncao) =>{
     } catch(erro){
         proximaFuncao(erro)
     }
+})
+
+//liberando rota api/fornecedores/idfornecedor para executar métodos no console do navegador
+roteador.options('/:idFornecedor',(requisicao,resposta)=>{
+    resposta.set('Access-Control-Allow-Methods', 'GET, PUT, DELETE')
+    resposta.set('Access-Control-Allow-Headers', 'Content-Type')
+    resposta.status(204)
+    resposta.end()
 })
 
 roteador.put('/:idFornecedor', async (requisicao, resposta, proximaFuncao) =>{
