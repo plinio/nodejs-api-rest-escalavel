@@ -15,7 +15,9 @@ roteador.get('/', async (requisicao, resposta) => {
     //vai esperar pegar os dados para enviar a resposta
     const resultados = await TabelaFornecedor.listar()
     resposta.status(200);
-    const serializador = new SerializadorFornecedor(resposta.getHeader('Content-Type'));
+    const serializador = new SerializadorFornecedor(
+        resposta.getHeader('Content-Type'), ['empresa']
+    );
     resposta.send(
         serializador.serializar(resultados)
     )
@@ -27,7 +29,9 @@ roteador.post('/', async (requisicao, resposta, proximaFuncao)=>{
         const fornecedor = new Fornecedor(dadosRecebidos);
         await fornecedor.criar();
         resposta.status(201);
-        const serializador = new SerializadorFornecedor(resposta.getHeader('Content-Type'));
+        const serializador = new SerializadorFornecedor(
+            resposta.getHeader('Content-Type'), ['empresa']
+        );
         resposta.send(
             serializador.serializar(fornecedor)
         ) 
@@ -35,6 +39,14 @@ roteador.post('/', async (requisicao, resposta, proximaFuncao)=>{
         proximaFuncao(erro)
     }
     
+})
+
+//liberando rota api/fornecedores/idfornecedor para executar métodos no console do navegador
+roteador.options('/:idFornecedor',(requisicao,resposta)=>{
+    resposta.set('Access-Control-Allow-Methods', 'GET, PUT, DELETE')
+    resposta.set('Access-Control-Allow-Headers', 'Content-Type')
+    resposta.status(204)
+    resposta.end()
 })
 
 roteador.get('/:idFornecedor', async (requisicao, resposta, proximaFuncao) =>{
@@ -45,7 +57,7 @@ roteador.get('/:idFornecedor', async (requisicao, resposta, proximaFuncao) =>{
         resposta.status(200);
         const serializador = new SerializadorFornecedor(
             resposta.getHeader('Content-Type'),
-            ['email', 'dataCriacao','dataAtualizacao']
+            ['email', 'empresa', 'dataCriacao','dataAtualizacao', 'versao']
             );
     
         resposta.send(
@@ -54,14 +66,6 @@ roteador.get('/:idFornecedor', async (requisicao, resposta, proximaFuncao) =>{
     } catch(erro){
         proximaFuncao(erro)
     }
-})
-
-//liberando rota api/fornecedores/idfornecedor para executar métodos no console do navegador
-roteador.options('/:idFornecedor',(requisicao,resposta)=>{
-    resposta.set('Access-Control-Allow-Methods', 'GET, PUT, DELETE')
-    resposta.set('Access-Control-Allow-Headers', 'Content-Type')
-    resposta.status(204)
-    resposta.end()
 })
 
 roteador.put('/:idFornecedor', async (requisicao, resposta, proximaFuncao) =>{

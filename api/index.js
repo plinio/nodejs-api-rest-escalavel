@@ -38,6 +38,9 @@ app.use((requisicao, resposta, proximo)=>{
 
 app.use('/api/fornecedores', roteador)
 
+const roteadorV2 = require('./rotas/fornecedores/rotas.v2')
+app.use('/api/v2/fornecedores', roteadorV2)
+
 app.use((erro, requisicao, resposta, proximaFuncao) =>{
     let status = 500 //erro generico
     if(erro instanceof NaoEncontrado){
