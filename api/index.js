@@ -10,6 +10,13 @@ const FormatosAceitos = require('./Serializador').formatosAceitos
 const SerializadorErro = require('./Serializador').SerializadorErro
 
 app.use(bodyParser.json());
+
+//middleware liberando acesso da api pelo console do navegador se estiver em qualquer site (*)
+app.use((requisicao, resposta, proximo)=>{
+    resposta.set('Access-Control-Allow-Origin', '*')
+    proximo()
+})
+
 const roteador = require('./rotas/fornecedores');
 
 app.use((requisicao, resposta, proximo)=>{
